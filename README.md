@@ -55,23 +55,25 @@ docker-compose up -d
 Once you started the application, you need to set user preferences
 ```bash
 
-curl -X PUT http://localhost:3000/user/usr_123/preferences \
+curl -X POST http://localhost:3000/user/usr_abcde/preferences \
   -H "Content-Type: application/json" \
   -d '{
-    "eventType": "item_shipped",
-    "enabled": true,
-    "channels": ["email", "push"]
+    "eventTypes": {
+      "item_shipped": {
+        "enabled": true,
+        "channels": ["email", "push"]
+      },
+    }
   }'
 ```
-
 Then, send an event for processing
 
 ```bash
-curl -X POST http://localhost:3000/event \
+curl -X POST http://localhost:3000/events \
   -H "Content-Type: application/json" \
   -d '{
     "eventId": "evt_12345",
-    "userId": "usr_123",
+    "userId": "usr_abcde",
     "eventType": "item_shipped",
     "timestamp": "2025-07-21T10:00:00Z",
     "payload": {
@@ -87,16 +89,17 @@ curl -X POST http://localhost:3000/event \
 
 Once you started the application, you need to set user preferences
 ```bash
-
-curl -X PUT http://localhost:3000/user/usr_123/preferences \
+curl -X POST http://localhost:3000/user/usr_abcde/preferences \
   -H "Content-Type: application/json" \
   -d '{
-    "eventType": "new_feature_added",
-    "enabled": true,
-    "channels": ["email", "push"]
+    "eventTypes": {
+      "new_feature_added": {
+        "enabled": true,
+        "channels": ["email", "push"]
+      },
+    }
   }'
 ```
-
 Then, add DND Window
 
 ```bash
@@ -117,7 +120,7 @@ curl -X POST http://localhost:3000/event \
   -H "Content-Type: application/json" \
   -d '{
     "eventId": "evt_12345",
-    "userId": "usr_123",
+    "userId": "user_abcde",
     "eventType": "new_feature_added",
     "timestamp": "2025-07-24T04:00:00Z",
     "payload": {
@@ -126,7 +129,6 @@ curl -X POST http://localhost:3000/event \
       "trackingNumber": "FX123456789"
     }
   }'
-
 ```
 Since the DND window starts at 22:00 on Wednesday and should end at 06:00 on Thursday, the decision would be not to notify.
 
