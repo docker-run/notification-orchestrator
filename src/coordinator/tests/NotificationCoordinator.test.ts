@@ -44,9 +44,15 @@ describe('NotificationCoordinator', () => {
         payload: {}
       };
 
-      await expect(coordinator.processEvent(testEvent)).rejects.toThrow("User preferences not found");
+      const result = await coordinator.processEvent(testEvent)
+      expect(result).toEqual(
+        {
+          "decision": "DO_NOT_NOTIFY",
+          "eventId": "evt_12345",
+          "reason": "USER_NOT_FOUND",
+          "userId": "usr_nonexistent",
+        })
     });
-
 
     it('should not process event w/o configured channels', async () => {
       const testEvent = {

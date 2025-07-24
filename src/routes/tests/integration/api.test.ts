@@ -343,10 +343,13 @@ describe('API Integration Tests', () => {
       payload: { orderId: 'ord_123' }
     };
 
-    await request(app)
+    const response = await request(app)
       .post('/event')
       .send(event1)
-      .expect(404);
+      .expect(200);
+
+    expect(response.body.decision).toBe('DO_NOT_NOTIFY');
+    expect(response.body.reason).toBe('USER_NOT_FOUND');
   });
 
   it("should handle events with dnd window timezone differences", async () => {

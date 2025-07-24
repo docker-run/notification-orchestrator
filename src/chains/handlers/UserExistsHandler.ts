@@ -3,7 +3,19 @@ import { BaseHandler, BaseHandlerDecision } from "./BaseHandler";
 
 export class UserExistsHandler extends BaseHandler {
   protected async process(event: NotificationEvent): Promise<BaseHandlerDecision> {
-    const prefs = await this.repository.getUserPreferences(event.userId);
-    return { shouldContinue: prefs ? true : false };
+    try {
+      await this.repository.getUserPreferences(event.userId);
+      return { shouldContinue: true };
+    } catch (error) {
+      return {
+        shouldContinue: false,
+        decision: {
+          decision: 'DO_NOT_NOTIFY',
+          eventId: event.eventId,
+          userId: event.userId,
+          reason: 'USER_NOT_FOUND'
+        }
+      };
+    }
   }
 }

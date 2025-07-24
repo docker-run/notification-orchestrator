@@ -37,5 +37,5 @@ export type NotificationDecision =
     decision: 'DO_NOT_NOTIFY';
     eventId: string;
     userId: string;
-    reason: 'DND_ACTIVE' | 'USER_UNSUBSCRIBED' | 'NO_CHANNELS_CONFIGURED'
+    reason: 'DND_ACTIVE' | 'USER_UNSUBSCRIBED' | 'NO_CHANNELS_CONFIGURED' | 'USER_NOT_FOUND'
   };

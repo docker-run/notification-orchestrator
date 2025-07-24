@@ -4,7 +4,6 @@ import { BaseHandler, BaseHandlerDecision } from "./BaseHandler";
 export class EventTypeSubscriptionHandler extends BaseHandler {
   protected async process(event: NotificationEvent): Promise<BaseHandlerDecision> {
     const preferences = await this.repository.getUserPreferences(event.userId);
-    console.log('p', event, preferences)
     const eventTypePrefs = preferences.eventTypes[event.eventType];
 
     if (!eventTypePrefs || !eventTypePrefs.enabled) {

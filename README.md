@@ -45,7 +45,7 @@ git clone https://github.com/docker-run/notification-orchestrator.git
 
 Then, build and start the application and database services using Docker Compose. Inside the root of the repository:
 ```bash
-docker-compose up -d
+docker-compose up --build
 ```
 
 ## Usage
@@ -53,9 +53,9 @@ docker-compose up -d
 ### Basic Example
 
 Once you started the application, you need to set user preferences
-```bash
 
-curl -X POST http://localhost:3000/user/usr_abcde/preferences \
+```bash
+curl -X POST http://localhost:3000/user/user_abcde/preferences \
   -H "Content-Type: application/json" \
   -d '{
     "eventTypes": {
@@ -63,17 +63,22 @@ curl -X POST http://localhost:3000/user/usr_abcde/preferences \
         "enabled": true,
         "channels": ["email", "push"]
       },
+      "invoice_generated": {
+        "enabled": false,
+        "channels": []
+      }
     }
   }'
+
 ```
 Then, send an event for processing
 
 ```bash
-curl -X POST http://localhost:3000/events \
+curl -X POST http://localhost:3000/event \
   -H "Content-Type: application/json" \
   -d '{
     "eventId": "evt_12345",
-    "userId": "usr_abcde",
+    "userId": "user_abcde",
     "eventType": "item_shipped",
     "timestamp": "2025-07-21T10:00:00Z",
     "payload": {
@@ -88,22 +93,24 @@ curl -X POST http://localhost:3000/events \
 ### Advanced Example
 
 Once you started the application, you need to set user preferences
+
 ```bash
-curl -X POST http://localhost:3000/user/usr_abcde/preferences \
+curl -X POST http://localhost:3000/user/user_abcde/preferences \
   -H "Content-Type: application/json" \
   -d '{
     "eventTypes": {
       "new_feature_added": {
         "enabled": true,
         "channels": ["email", "push"]
-      },
+      }
     }
   }'
+
 ```
 Then, add DND Window
 
 ```bash
-curl -X POST http://localhost:3000/user/usr_abcde/dnd-windows \
+curl -X POST http://localhost:3000/user/user_abcde/dnd-windows \
   -H "Content-Type: application/json" \
   -d '{
     "days": ["monday", "tuesday", "wednesday"],
@@ -124,11 +131,10 @@ curl -X POST http://localhost:3000/event \
     "eventType": "new_feature_added",
     "timestamp": "2025-07-24T04:00:00Z",
     "payload": {
-      "orderId": "ord_67890",
-      "shippingCarrier": "Federal Express",
-      "trackingNumber": "FX123456789"
+      "featureName": "Dark mode"
     }
   }'
+
 ```
 Since the DND window starts at 22:00 on Wednesday and should end at 06:00 on Thursday, the decision would be not to notify.
 
@@ -210,5 +216,6 @@ DNDWindows Table
 
 To run unit tests for core logic and API integration tests, run the following command from the root of application
 ```bash
+npm i
 npm run test
 ```
