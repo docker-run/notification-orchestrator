@@ -214,6 +214,8 @@ DNDWindows Table
 
 ## Testing
 
+Prerequisites: make sure database container is running before starting integration tests (see Installation section)
+
 To run unit tests for core logic and API integration tests, run the following command from the root of application
 ```bash
 npm i
